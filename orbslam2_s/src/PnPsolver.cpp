@@ -1,4 +1,4 @@
-﻿/**
+/**
 * This file is part of ORB-SLAM2.
 * This file is a modified version of EPnP <http://cvlab.epfl.ch/EPnP/index.php>, see FreeBSD license below.
 *

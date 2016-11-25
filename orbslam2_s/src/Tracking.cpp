@@ -1,4 +1,4 @@
-﻿/**
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -54,7 +54,7 @@ namespace ORB_SLAM2
 
 Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, Map *pMap, KeyFrameDatabase* pKFDB, const string &strSettingPath, const int sensor):
     mState(NO_IMAGES_YET), mSensor(sensor), mbOnlyTracking(false), mbVO(false), mpORBVocabulary(pVoc),
-    mpKeyFrameDB(pKFDB), /*mpInitializer(static_cast<Initializer*>(NULL)),*/ mpSystem(pSys), mpMap(pMap), mnLastRelocFrameId(0)
+    mpKeyFrameDB(pKFDB), mpSystem(pSys), mpMap(pMap), mnLastRelocFrameId(0)
 {
     // Load camera parameters from settings file
 
@@ -142,10 +142,6 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, Map *pMap, KeyFrameDatabas
     if(sensor==System::STEREO)
         mpORBextractorRight = new ORBextractor(nFeatures,fScaleFactor,nLevels,fIniThFAST,fMinThFAST);
 
-    //// 在单目初始化的时候，会用mpIniORBextractor来作为特征点提取器
-    //if(sensor==System::MONOCULAR)
-    //    mpIniORBextractor = new ORBextractor(2*nFeatures,fScaleFactor,nLevels,fIniThFAST,fMinThFAST);
-
     cout << endl  << "ORB Extractor Parameters: " << endl;
     cout << "- Number of Features: " << nFeatures << endl;
     cout << "- Scale Levels: " << nLevels << endl;
@@ -159,17 +155,6 @@ Tracking::Tracking(System *pSys, ORBVocabulary* pVoc, Map *pMap, KeyFrameDatabas
         mThDepth = mbf*(float)fSettings["ThDepth"]/fx;
         cout << endl << "Depth Threshold (Close/Far Points): " << mThDepth << endl;
     }
-
-    //if(sensor==System::RGBD)
-    //{
-    //    // 深度相机disparity转化为depth时的因子
-    //    mDepthMapFactor = fSettings["DepthMapFactor"];
-    //    if(fabs(mDepthMapFactor)<1e-5)
-    //        mDepthMapFactor=1;
-    //    else
-    //        mDepthMapFactor = 1.0f/mDepthMapFactor;
-    //}
-
 }
 
 void Tracking::SetLocalMapper(LocalMapping *pLocalMapper)
@@ -227,80 +212,6 @@ cv::Mat Tracking::GrabImageStereo(const cv::Mat &imRectLeft, const cv::Mat &imRe
 
     return mCurrentFrame.mTcw.clone();
 }
-//
-//// 输入左目RGB或RGBA图像和深度图
-//// 1、将图像转为mImGray和imDepth并初始化mCurrentFrame
-//// 2、进行tracking过程
-//// 输出世界坐标系到该帧相机坐标系的变换矩阵
-//cv::Mat Tracking::GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const double &timestamp)
-//{
-//    mImGray = imRGB;
-//    cv::Mat imDepth = imD;
-//
-//    // 步骤1：将RGB或RGBA图像转为灰度图像
-//    if(mImGray.channels()==3)
-//    {
-//        if(mbRGB)
-//            cvtColor(mImGray,mImGray,CV_RGB2GRAY);
-//        else
-//            cvtColor(mImGray,mImGray,CV_BGR2GRAY);
-//    }
-//    else if(mImGray.channels()==4)
-//    {
-//        if(mbRGB)
-//            cvtColor(mImGray,mImGray,CV_RGBA2GRAY);
-//        else
-//            cvtColor(mImGray,mImGray,CV_BGRA2GRAY);
-//    }
-//
-//    // 步骤2：将深度相机的disparity转为Depth
-//    if((fabs(mDepthMapFactor-1.0f)>1e-5) || imDepth.type()!=CV_32F)
-//        imDepth.convertTo(imDepth,CV_32F,mDepthMapFactor);
-//
-//    // 步骤3：构造Frame
-//    mCurrentFrame = Frame(mImGray,imDepth,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
-//
-//    // 步骤4：跟踪
-//    Track();
-//
-//    return mCurrentFrame.mTcw.clone();
-//}
-//
-//// 输入左目RGB或RGBA图像
-//// 1、将图像转为mImGray并初始化mCurrentFrame
-//// 2、进行tracking过程
-//// 输出世界坐标系到该帧相机坐标系的变换矩阵
-//cv::Mat Tracking::GrabImageMonocular(const cv::Mat &im, const double &timestamp)
-//{
-//    mImGray = im;
-//
-//    // 步骤1：将RGB或RGBA图像转为灰度图像
-//    if(mImGray.channels()==3)
-//    {
-//        if(mbRGB)
-//            cvtColor(mImGray,mImGray,CV_RGB2GRAY);
-//        else
-//            cvtColor(mImGray,mImGray,CV_BGR2GRAY);
-//    }
-//    else if(mImGray.channels()==4)
-//    {
-//        if(mbRGB)
-//            cvtColor(mImGray,mImGray,CV_RGBA2GRAY);
-//        else
-//            cvtColor(mImGray,mImGray,CV_BGRA2GRAY);
-//    }
-//
-//    // 步骤2：构造Frame
-//    if(mState==NOT_INITIALIZED || mState==NO_IMAGES_YET)// 没有成功初始化的前一个状态就是NO_IMAGES_YET
-//        mCurrentFrame = Frame(mImGray,timestamp,mpIniORBextractor,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
-//    else
-//        mCurrentFrame = Frame(mImGray,timestamp,mpORBextractorLeft,mpORBVocabulary,mK,mDistCoef,mbf,mThDepth);
-//
-//    // 步骤3：跟踪
-//    Track();
-//
-//    return mCurrentFrame.mTcw.clone();
-//}
 
 /**
  * @brief Main tracking function. It is independent of the input sensor.
@@ -330,8 +241,6 @@ void Tracking::Track()
     {
         if(mSensor==System::STEREO || mSensor==System::RGBD)
             StereoInitialization();
-        //else
-        //    MonocularInitialization();
 
         if(mState!=OK)
             return;
@@ -695,235 +604,6 @@ void Tracking::StereoInitialization()
     }
 }
 
-///**
-// * @brief 单目的地图初始化
-// *
-// * 并行地计算基础矩阵和单应性矩阵，选取其中一个模型，恢复出最开始两帧之间的相对姿态以及点云
-// * 得到初始两帧的匹配、相对运动、初始MapPoints
-// */
-//void Tracking::MonocularInitialization()
-//{
-//    // 如果单目初始器还没有被创建，则创建单目初始器
-//    if(!mpInitializer)
-//    {
-//        // Set Reference Frame
-//        // 单目初始帧的特征点数必须大于100
-//        if(mCurrentFrame.mvKeys.size()>100)
-//        {
-//            // 步骤1：得到用于初始化的第一帧，初始化需要两帧
-//            mInitialFrame = Frame(mCurrentFrame);
-//            // 记录最近的一帧
-//            mLastFrame = Frame(mCurrentFrame);
-//            // mvbPrevMatched最大的情况就是所有特征点都被跟踪上
-//            mvbPrevMatched.resize(mCurrentFrame.mvKeysUn.size());
-//            for(size_t i=0; i<mCurrentFrame.mvKeysUn.size(); i++)
-//                mvbPrevMatched[i]=mCurrentFrame.mvKeysUn[i].pt;
-//
-//            // 这两句是多余的
-//            if(mpInitializer)
-//                delete mpInitializer;
-//
-//            // 由当前帧构造初始器 sigma:1.0 iterations:200
-//            mpInitializer =  new Initializer(mCurrentFrame,1.0,200);
-//
-//            fill(mvIniMatches.begin(),mvIniMatches.end(),-1);
-//
-//            return;
-//        }
-//    }
-//    else
-//    {
-//        // Try to initialize
-//        // 步骤2：如果当前帧特征点数大于100，则得到用于单目初始化的第二帧
-//        // 如果当前帧特征点太少，重新构造初始器
-//        // 因此只有连续两帧的特征点个数都大于100时，才能继续进行初始化过程
-//        if((int)mCurrentFrame.mvKeys.size()<=100)
-//        {
-//            delete mpInitializer;
-//            mpInitializer = static_cast<Initializer*>(NULL);
-//            fill(mvIniMatches.begin(),mvIniMatches.end(),-1);
-//            return;
-//        }
-//
-//        // Find correspondences
-//        // 步骤3：在mInitialFrame与mCurrentFrame中找匹配的特征点对
-//        // mvbPrevMatched为前一帧的特征点，存储了mInitialFrame中哪些点将进行接下来的匹配
-//        // mvIniMatches存储mInitialFrame,mCurrentFrame之间匹配的特征点
-//        ORBmatcher matcher(0.9,true);
-//        int nmatches = matcher.SearchForInitialization(mInitialFrame,mCurrentFrame,mvbPrevMatched,mvIniMatches,100);
-//
-//        // Check if there are enough correspondences
-//        // 步骤4：如果初始化的两帧之间的匹配点太少，重新初始化
-//        if(nmatches<100)
-//        {
-//            delete mpInitializer;
-//            mpInitializer = static_cast<Initializer*>(NULL);
-//            return;
-//        }
-//
-//        cv::Mat Rcw; // Current Camera Rotation
-//        cv::Mat tcw; // Current Camera Translation
-//        vector<bool> vbTriangulated; // Triangulated Correspondences (mvIniMatches)
-//
-//        // 步骤5：通过H模型或F模型进行单目初始化，得到两帧间相对运动、初始MapPoints
-//        if(mpInitializer->Initialize(mCurrentFrame, mvIniMatches, Rcw, tcw, mvIniP3D, vbTriangulated))
-//        {
-//            // 步骤6：删除那些无法进行三角化的匹配点
-//            for(size_t i=0, iend=mvIniMatches.size(); i<iend;i++)
-//            {
-//                if(mvIniMatches[i]>=0 && !vbTriangulated[i])
-//                {
-//                    mvIniMatches[i]=-1;
-//                    nmatches--;
-//                }
-//            }
-//
-//            // Set Frame Poses
-//            // 将初始化的第一帧作为世界坐标系，因此第一帧变换矩阵为单位矩阵
-//            mInitialFrame.SetPose(cv::Mat::eye(4,4,CV_32F));
-//            // 由Rcw和tcw构造Tcw,并赋值给mTcw，mTcw为世界坐标系到该帧的变换矩阵
-//            cv::Mat Tcw = cv::Mat::eye(4,4,CV_32F);
-//            Rcw.copyTo(Tcw.rowRange(0,3).colRange(0,3));
-//            tcw.copyTo(Tcw.rowRange(0,3).col(3));
-//            mCurrentFrame.SetPose(Tcw);
-//
-//            // 步骤6：将三角化得到的3D点包装成MapPoints
-//            // Initialize函数会得到mvIniP3D，
-//            // mvIniP3D是cv::Point3f类型的一个容器，是个存放3D点的临时变量，
-//            // CreateInitialMapMonocular将3D点包装成MapPoint类型存入KeyFrame和Map中
-//            CreateInitialMapMonocular();
-//        }
-//    }
-//}
-//
-///**
-// * @brief CreateInitialMapMonocular
-// *
-// * 为单目摄像头三角化生成MapPoints
-// */
-//void Tracking::CreateInitialMapMonocular()
-//{
-//    // Create KeyFrames
-//    KeyFrame* pKFini = new KeyFrame(mInitialFrame,mpMap,mpKeyFrameDB);
-//    KeyFrame* pKFcur = new KeyFrame(mCurrentFrame,mpMap,mpKeyFrameDB);
-//
-//    // 步骤1：将初始关键帧的描述子转为BoW
-//    pKFini->ComputeBoW();
-//    // 步骤2：将当前关键帧的描述子转为BoW
-//    pKFcur->ComputeBoW();
-//
-//    // Insert KFs in the map
-//    // 步骤3：将关键帧插入到地图
-//    // 凡是关键帧，都要插入地图
-//    mpMap->AddKeyFrame(pKFini);
-//    mpMap->AddKeyFrame(pKFcur);
-//
-//    // Create MapPoints and asscoiate to keyframes
-//    // 步骤4：将3D点包装成MapPoints
-//    for(size_t i=0; i<mvIniMatches.size();i++)
-//    {
-//        if(mvIniMatches[i]<0)
-//            continue;
-//
-//        //Create MapPoint.
-//        cv::Mat worldPos(mvIniP3D[i]);
-//
-//        // 步骤4.1：用3D点构造MapPoint
-//        MapPoint* pMP = new MapPoint(worldPos,pKFcur,mpMap);
-//
-//        // 步骤4.2：为该MapPoint添加属性：
-//        // a.观测到该MapPoint的关键帧
-//        // b.该MapPoint的描述子
-//        // c.该MapPoint的平均观测方向和深度范围
-//
-//        // 步骤4.3：表示该KeyFrame的哪个特征点可以观测到哪个3D点
-//        pKFini->AddMapPoint(pMP,i);
-//        pKFcur->AddMapPoint(pMP,mvIniMatches[i]);
-//
-//        // a.表示该MapPoint可以被哪个KeyFrame的哪个特征点观测到
-//        pMP->AddObservation(pKFini,i);
-//        pMP->AddObservation(pKFcur,mvIniMatches[i]);
-//
-//        // b.从众多观测到该MapPoint的特征点中挑选区分读最高的描述子
-//        pMP->ComputeDistinctiveDescriptors();
-//        // c.更新该MapPoint平均观测方向以及观测距离的范围
-//        pMP->UpdateNormalAndDepth();
-//
-//        //Fill Current Frame structure
-//        mCurrentFrame.mvpMapPoints[mvIniMatches[i]] = pMP;
-//        mCurrentFrame.mvbOutlier[mvIniMatches[i]] = false;
-//
-//        //Add to Map
-//        // 步骤4.4：在地图中添加该MapPoint
-//        mpMap->AddMapPoint(pMP);
-//    }
-//
-//    // Update Connections
-//    // 步骤5：更新关键帧间的连接关系
-//    // 在3D点和关键帧之间建立边，每个边有一个权重，边的权重是该关键帧与当前帧公共3D点的个数
-//    pKFini->UpdateConnections();
-//    pKFcur->UpdateConnections();
-//
-//    // Bundle Adjustment
-//    cout << "New Map created with " << mpMap->MapPointsInMap() << " points" << endl;
-//
-//    // 步骤5：BA优化
-//    Optimizer::GlobalBundleAdjustemnt(mpMap,20);
-//
-//    // Set median depth to 1
-//    // 步骤6：!!!将MapPoints的中值深度归一化到1，并归一化两帧之间变换
-//    // 评估关键帧场景深度，q=2表示中值
-//    float medianDepth = pKFini->ComputeSceneMedianDepth(2);
-//    float invMedianDepth = 1.0f/medianDepth;
-//
-//    if(medianDepth<0 || pKFcur->TrackedMapPoints(1)<100)
-//    {
-//        cout << "Wrong initialization, reseting..." << endl;
-//        Reset();
-//        return;
-//    }
-//
-//    // Scale initial baseline
-//    cv::Mat Tc2w = pKFcur->GetPose();
-//    // x/z y/z 将z归一化到1 
-//    Tc2w.col(3).rowRange(0,3) = Tc2w.col(3).rowRange(0,3)*invMedianDepth;
-//    pKFcur->SetPose(Tc2w);
-//
-//    // Scale points
-//    // 把3D点的尺度也归一化到1
-//    vector<MapPoint*> vpAllMapPoints = pKFini->GetMapPointMatches();
-//    for(size_t iMP=0; iMP<vpAllMapPoints.size(); iMP++)
-//    {
-//        if(vpAllMapPoints[iMP])
-//        {
-//            MapPoint* pMP = vpAllMapPoints[iMP];
-//            pMP->SetWorldPos(pMP->GetWorldPos()*invMedianDepth);
-//        }
-//    }
-//
-//    // 这部分和SteroInitialization()相似
-//    mpLocalMapper->InsertKeyFrame(pKFini);
-//    mpLocalMapper->InsertKeyFrame(pKFcur);
-//
-//    mCurrentFrame.SetPose(pKFcur->GetPose());
-//    mnLastKeyFrameId=mCurrentFrame.mnId;
-//    mpLastKeyFrame = pKFcur;
-//
-//    mvpLocalKeyFrames.push_back(pKFcur);
-//    mvpLocalKeyFrames.push_back(pKFini);
-//    mvpLocalMapPoints=mpMap->GetAllMapPoints();
-//    mpReferenceKF = pKFcur;
-//    mCurrentFrame.mpReferenceKF = pKFcur;
-//
-//    mLastFrame = Frame(mCurrentFrame);
-//
-//    mpMap->SetReferenceMapPoints(mvpLocalMapPoints);
-//
-//    mpMap->mvpKeyFrameOrigins.push_back(pKFini);
-//
-//    mState=OK;// 初始化成功，至此，初始化过程完成
-//}
-
 /**
  * @brief 替换上一帧中的某些MapPoints
  * 
@@ -1021,7 +701,7 @@ void Tracking::UpdateLastFrame()
     mLastFrame.SetPose(Tlr*pRef->GetPose()); // Tlr*Trw = Tlw 1:last r:reference w:world
 
     // 如果上一帧为关键帧，或者单目的情况，则退出
-    if(mnLastKeyFrameId==mLastFrame.mnId || mSensor==System::MONOCULAR)
+    if(mnLastKeyFrameId==mLastFrame.mnId)
         return;
 
     // 步骤2：对于双目或rgbd摄像头，为上一帧临时生成新的MapPoints
@@ -1319,8 +999,6 @@ bool Tracking::NeedNewKeyFrame()
     float thRefRatio = 0.75f;
     if(nKFs<2)
         thRefRatio = 0.4f;// 关键帧只有一帧，那么插入关键帧的阈值设置很低
-    if(mSensor==System::MONOCULAR)
-        thRefRatio = 0.9f;
 
     // MapPoints中和地图关联的比例阈值
     float thMapRatio = 0.35f;
@@ -1529,8 +1207,6 @@ void Tracking::SearchLocalPoints()
     {
         ORBmatcher matcher(0.8);
         int th = 1;
-        if(mSensor==System::RGBD)
-            th=3;
 
         // If the camera has been relocalised recently, perform a coarser search
         // 如果不久前进行过重定位，那么进行一个更加宽泛的搜索，阈值需要增大
@@ -1924,12 +1600,6 @@ void Tracking::Reset()
     KeyFrame::nNextId = 0;
     Frame::nNextId = 0;
     mState = NO_IMAGES_YET;
-
-    //if(mpInitializer)
-    //{
-    //    delete mpInitializer;
-    //    mpInitializer = static_cast<Initializer*>(NULL);
-    //}
 
     mlRelativeFramePoses.clear();
     mlpReferences.clear();

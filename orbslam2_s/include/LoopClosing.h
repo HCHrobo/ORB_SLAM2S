@@ -46,10 +46,12 @@ class LoopClosing
 public:
 
     typedef pair<set<KeyFrame*>,int> ConsistentGroup;    
-    typedef map<KeyFrame*,g2o::Sim3,std::less<KeyFrame*>,
+	typedef map<KeyFrame*, g2o::Sim3, std::less<KeyFrame*>,
         Eigen::aligned_allocator<std::pair<const KeyFrame*, g2o::Sim3> > > KeyFrameAndPose;
 
 public:
+
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW//add by how avoid the R6010 -abort()has been called caused by g2o::sim3()
 
     LoopClosing(Map* pMap, KeyFrameDatabase* pDB, ORBVocabulary* pVoc,const bool bFixScale);
 

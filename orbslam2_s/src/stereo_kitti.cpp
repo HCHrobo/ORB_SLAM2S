@@ -18,7 +18,7 @@
 * along with ORB-SLAM2. If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+//#include "vld.h"
 #include<iostream>
 #include<algorithm>
 #include<fstream>
@@ -28,14 +28,30 @@
 #include<opencv2/core/core.hpp>
 
 #include<System.h>
-
-using namespace std;
+//
+//#ifdef _DEBUG
+//#define DEBUG_CLIENTBLOCK new( _CLIENT_BLOCK, __FILE__, __LINE__)
+//#else
+//#define DEBUG_CLIENTBLOCK
+//#endif  // _DEBUG
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+//#ifdef _DEBUG
+//#define new DEBUG_CLIENTBLOCK
+//#endif  // _DEBUG
+//
+//using namespace std;
 
 void LoadImages(const string &strPathToSequence, vector<string> &vstrImageLeft,
-                vector<string> &vstrImageRight, vector<double> &vTimestamps);
+	vector<string> &vstrImageRight, vector<double> &vTimestamps);
 
 int main(int argc, char **argv)
 {
+
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	////_CrtSetBreakAlloc(4403013);
+
     // Retrieve paths to images
     vector<string> vstrImageLeft;
     vector<string> vstrImageRight;
@@ -45,7 +61,7 @@ int main(int argc, char **argv)
     const int nImages = vstrImageLeft.size();
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-	ORB_SLAM2::System SLAM("D:\\test\\ORB-SLAM2\\Vocabulary\\ORBvoc.bin", "D:\\test\\ORB-SLAM2\\Examples\\Stereo\\KITTI03.yaml", ORB_SLAM2::System::STEREO);// by how
+	ORB_SLAM2::System SLAM("D:\\test\\ORB-SLAM2\\Vocabulary\\ORBvoc.bin", "D:\\test\\ORB-SLAM2\\Examples\\Stereo\\KITTI00-02.yaml", ORB_SLAM2::System::STEREO);// by how
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
@@ -57,7 +73,7 @@ int main(int argc, char **argv)
 
     // Main loop
     cv::Mat imLeft, imRight;
-    for(int ni=0; ni<nImages; ni++)
+    for(int ni=1100; ni<nImages; ni++)
     {
         // Read left and right images from file
         imLeft = cv::imread(vstrImageLeft[ni],CV_LOAD_IMAGE_UNCHANGED);
@@ -92,8 +108,8 @@ int main(int argc, char **argv)
         if(ttrack<T)
 			this_thread::sleep_for(std::chrono::microseconds((int)((T-ttrack)*1e6)));
 		//if (ni % 100 == 0)// add by how
-		cerr << endl << "Finished at image: "
-			<< string(vstrImageLeft[ni]) << endl;// add by how
+		//cerr << endl << "Finished at image: "
+		//	<< string(vstrImageLeft[ni]) << endl;// add by how
     }
 
     // Stop all threads

@@ -1,4 +1,4 @@
-﻿/**
+/**
 * This file is part of ORB-SLAM2.
 * This file is based on the file orb.cpp from the OpenCV library (see BSD license below).
 *

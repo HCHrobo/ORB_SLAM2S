@@ -66,9 +66,6 @@
     <ClCompile Include="src\Frame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Initializer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\KeyFrame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -228,9 +225,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\Frame.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Initializer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\KeyFrame.h">

@@ -1,4 +1,4 @@
-﻿/**
+/**
 * This file is part of ORB-SLAM2.
 *
 * Copyright (C) 2014-2016 Raúl Mur-Artal <raulmur at unizar dot es> (University of Zaragoza)
@@ -54,8 +54,6 @@ public:
 
     // Preprocess the input and call Track(). Extract features and performs stereo matching.
     cv::Mat GrabImageStereo(const cv::Mat &imRectLeft,const cv::Mat &imRectRight, const double &timestamp);
-    //cv::Mat GrabImageRGBD(const cv::Mat &imRGB,const cv::Mat &imD, const double &timestamp);
-    //cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp);
 
     void SetLocalMapper(LocalMapping* pLocalMapper);
     void SetLoopClosing(LoopClosing* pLoopClosing);
@@ -90,7 +88,6 @@ public:
     Frame mCurrentFrame;
     cv::Mat mImGray;
 
-    // Initialization Variables (Monocular)
     // 初始化时前两帧相关变量
     std::vector<int> mvIniLastMatches;
     std::vector<int> mvIniMatches;// 跟踪初始化时前两帧之间的匹配
@@ -117,10 +114,6 @@ protected:
 
     // Map initialization for stereo and RGB-D
     void StereoInitialization();
-
-    //// Map initialization for monocular
-    //void MonocularInitialization();
-    //void CreateInitialMapMonocular();
 
     void CheckReplacedInLastFrame();
     bool TrackReferenceKeyFrame();
@@ -160,10 +153,6 @@ protected:
     //BoW
     ORBVocabulary* mpORBVocabulary;
     KeyFrameDatabase* mpKeyFrameDB;
-
-    //// Initalization (only for monocular)
-    //// 单目初始器
-    //Initializer* mpInitializer;
 
     //Local Map
     KeyFrame* mpReferenceKF;// 当前关键帧就是参考帧

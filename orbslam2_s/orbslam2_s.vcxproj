@@ -41,6 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Program Files\Visual Leak Detector\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Program Files\Visual Leak Detector\bin\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,7 +85,6 @@
   <ItemGroup>
     <ClCompile Include="src\Converter.cpp" />
     <ClCompile Include="src\Frame.cpp" />
-    <ClCompile Include="src\Initializer.cpp" />
     <ClCompile Include="src\KeyFrame.cpp" />
     <ClCompile Include="src\KeyFrameDatabase.cpp" />
     <ClCompile Include="src\LocalMapping.cpp" />
@@ -139,7 +140,6 @@
   <ItemGroup>
     <ClInclude Include="include\Converter.h" />
     <ClInclude Include="include\Frame.h" />
-    <ClInclude Include="include\Initializer.h" />
     <ClInclude Include="include\KeyFrame.h" />
     <ClInclude Include="include\KeyFrameDatabase.h" />
     <ClInclude Include="include\LocalMapping.h" />
