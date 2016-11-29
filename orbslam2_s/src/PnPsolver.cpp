@@ -193,12 +193,12 @@ void PnPsolver::SetRansacParameters(double probability, int minInliers, int maxI
     for(size_t i=0; i<mvSigma2.size(); i++)// 不同的尺度，设置不同的最大偏差
         mvMaxError[i] = mvSigma2[i]*th2;
 }
-
-cv::Mat PnPsolver::find(vector<bool> &vbInliers, int &nInliers)
-{
-    bool bFlag;
-    return iterate(mRansacMaxIts,bFlag,vbInliers,nInliers);    
-}
+//
+//cv::Mat PnPsolver::find(vector<bool> &vbInliers, int &nInliers)
+//{
+//    bool bFlag;
+//    return iterate(mRansacMaxIts,bFlag,vbInliers,nInliers);    
+//}
 
 cv::Mat PnPsolver::iterate(int nIterations, bool &bNoMore, vector<bool> &vbInliers, int &nInliers)
 {
@@ -718,13 +718,13 @@ void PnPsolver::estimate_R_and_t(double R[3][3], double t[3])
   t[1] = pc0[1] - dot(R[1], pw0);
   t[2] = pc0[2] - dot(R[2], pw0);
 }
-
-void PnPsolver::print_pose(const double R[3][3], const double t[3])
-{
-  cout << R[0][0] << " " << R[0][1] << " " << R[0][2] << " " << t[0] << endl;
-  cout << R[1][0] << " " << R[1][1] << " " << R[1][2] << " " << t[1] << endl;
-  cout << R[2][0] << " " << R[2][1] << " " << R[2][2] << " " << t[2] << endl;
-}
+//
+//void PnPsolver::print_pose(const double R[3][3], const double t[3])
+//{
+//  cout << R[0][0] << " " << R[0][1] << " " << R[0][2] << " " << t[0] << endl;
+//  cout << R[1][0] << " " << R[1][1] << " " << R[1][2] << " " << t[1] << endl;
+//  cout << R[2][0] << " " << R[2][1] << " " << R[2][2] << " " << t[2] << endl;
+//}
 
 void PnPsolver::solve_for_sign(void)
 {
@@ -1044,74 +1044,74 @@ void PnPsolver::qr_solve(CvMat * A, CvMat * b, CvMat * X)
   }
 }
 
-
-
-void PnPsolver::relative_error(double & rot_err, double & transl_err,
-			  const double Rtrue[3][3], const double ttrue[3],
-			  const double Rest[3][3],  const double test[3])
-{
-  double qtrue[4], qest[4];
-
-  mat_to_quat(Rtrue, qtrue);
-  mat_to_quat(Rest, qest);
-
-  double rot_err1 = sqrt((qtrue[0] - qest[0]) * (qtrue[0] - qest[0]) +
-			 (qtrue[1] - qest[1]) * (qtrue[1] - qest[1]) +
-			 (qtrue[2] - qest[2]) * (qtrue[2] - qest[2]) +
-			 (qtrue[3] - qest[3]) * (qtrue[3] - qest[3]) ) /
-    sqrt(qtrue[0] * qtrue[0] + qtrue[1] * qtrue[1] + qtrue[2] * qtrue[2] + qtrue[3] * qtrue[3]);
-
-  double rot_err2 = sqrt((qtrue[0] + qest[0]) * (qtrue[0] + qest[0]) +
-			 (qtrue[1] + qest[1]) * (qtrue[1] + qest[1]) +
-			 (qtrue[2] + qest[2]) * (qtrue[2] + qest[2]) +
-			 (qtrue[3] + qest[3]) * (qtrue[3] + qest[3]) ) /
-    sqrt(qtrue[0] * qtrue[0] + qtrue[1] * qtrue[1] + qtrue[2] * qtrue[2] + qtrue[3] * qtrue[3]);
-
-  rot_err = min(rot_err1, rot_err2);
-
-  transl_err =
-    sqrt((ttrue[0] - test[0]) * (ttrue[0] - test[0]) +
-	 (ttrue[1] - test[1]) * (ttrue[1] - test[1]) +
-	 (ttrue[2] - test[2]) * (ttrue[2] - test[2])) /
-    sqrt(ttrue[0] * ttrue[0] + ttrue[1] * ttrue[1] + ttrue[2] * ttrue[2]);
-}
-
-void PnPsolver::mat_to_quat(const double R[3][3], double q[4])
-{
-  double tr = R[0][0] + R[1][1] + R[2][2];
-  double n4;
-
-  if (tr > 0.0f) {
-    q[0] = R[1][2] - R[2][1];
-    q[1] = R[2][0] - R[0][2];
-    q[2] = R[0][1] - R[1][0];
-    q[3] = tr + 1.0f;
-    n4 = q[3];
-  } else if ( (R[0][0] > R[1][1]) && (R[0][0] > R[2][2]) ) {
-    q[0] = 1.0f + R[0][0] - R[1][1] - R[2][2];
-    q[1] = R[1][0] + R[0][1];
-    q[2] = R[2][0] + R[0][2];
-    q[3] = R[1][2] - R[2][1];
-    n4 = q[0];
-  } else if (R[1][1] > R[2][2]) {
-    q[0] = R[1][0] + R[0][1];
-    q[1] = 1.0f + R[1][1] - R[0][0] - R[2][2];
-    q[2] = R[2][1] + R[1][2];
-    q[3] = R[2][0] - R[0][2];
-    n4 = q[1];
-  } else {
-    q[0] = R[2][0] + R[0][2];
-    q[1] = R[2][1] + R[1][2];
-    q[2] = 1.0f + R[2][2] - R[0][0] - R[1][1];
-    q[3] = R[0][1] - R[1][0];
-    n4 = q[2];
-  }
-  double scale = 0.5f / double(sqrt(n4));
-
-  q[0] *= scale;
-  q[1] *= scale;
-  q[2] *= scale;
-  q[3] *= scale;
-}
+//
+//
+//void PnPsolver::relative_error(double & rot_err, double & transl_err,
+//			  const double Rtrue[3][3], const double ttrue[3],
+//			  const double Rest[3][3],  const double test[3])
+//{
+//  double qtrue[4], qest[4];
+//
+//  mat_to_quat(Rtrue, qtrue);
+//  mat_to_quat(Rest, qest);
+//
+//  double rot_err1 = sqrt((qtrue[0] - qest[0]) * (qtrue[0] - qest[0]) +
+//			 (qtrue[1] - qest[1]) * (qtrue[1] - qest[1]) +
+//			 (qtrue[2] - qest[2]) * (qtrue[2] - qest[2]) +
+//			 (qtrue[3] - qest[3]) * (qtrue[3] - qest[3]) ) /
+//    sqrt(qtrue[0] * qtrue[0] + qtrue[1] * qtrue[1] + qtrue[2] * qtrue[2] + qtrue[3] * qtrue[3]);
+//
+//  double rot_err2 = sqrt((qtrue[0] + qest[0]) * (qtrue[0] + qest[0]) +
+//			 (qtrue[1] + qest[1]) * (qtrue[1] + qest[1]) +
+//			 (qtrue[2] + qest[2]) * (qtrue[2] + qest[2]) +
+//			 (qtrue[3] + qest[3]) * (qtrue[3] + qest[3]) ) /
+//    sqrt(qtrue[0] * qtrue[0] + qtrue[1] * qtrue[1] + qtrue[2] * qtrue[2] + qtrue[3] * qtrue[3]);
+//
+//  rot_err = min(rot_err1, rot_err2);
+//
+//  transl_err =
+//    sqrt((ttrue[0] - test[0]) * (ttrue[0] - test[0]) +
+//	 (ttrue[1] - test[1]) * (ttrue[1] - test[1]) +
+//	 (ttrue[2] - test[2]) * (ttrue[2] - test[2])) /
+//    sqrt(ttrue[0] * ttrue[0] + ttrue[1] * ttrue[1] + ttrue[2] * ttrue[2]);
+//}
+//
+//void PnPsolver::mat_to_quat(const double R[3][3], double q[4])
+//{
+//  double tr = R[0][0] + R[1][1] + R[2][2];
+//  double n4;
+//
+//  if (tr > 0.0f) {
+//    q[0] = R[1][2] - R[2][1];
+//    q[1] = R[2][0] - R[0][2];
+//    q[2] = R[0][1] - R[1][0];
+//    q[3] = tr + 1.0f;
+//    n4 = q[3];
+//  } else if ( (R[0][0] > R[1][1]) && (R[0][0] > R[2][2]) ) {
+//    q[0] = 1.0f + R[0][0] - R[1][1] - R[2][2];
+//    q[1] = R[1][0] + R[0][1];
+//    q[2] = R[2][0] + R[0][2];
+//    q[3] = R[1][2] - R[2][1];
+//    n4 = q[0];
+//  } else if (R[1][1] > R[2][2]) {
+//    q[0] = R[1][0] + R[0][1];
+//    q[1] = 1.0f + R[1][1] - R[0][0] - R[2][2];
+//    q[2] = R[2][1] + R[1][2];
+//    q[3] = R[2][0] - R[0][2];
+//    n4 = q[1];
+//  } else {
+//    q[0] = R[2][0] + R[0][2];
+//    q[1] = R[2][1] + R[1][2];
+//    q[2] = 1.0f + R[2][2] - R[0][0] - R[1][1];
+//    q[3] = R[0][1] - R[1][0];
+//    n4 = q[2];
+//  }
+//  double scale = 0.5f / double(sqrt(n4));
+//
+//  q[0] *= scale;
+//  q[1] *= scale;
+//  q[2] *= scale;
+//  q[3] *= scale;
+//}
 
 } //namespace ORB_SLAM

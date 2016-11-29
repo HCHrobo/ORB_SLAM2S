@@ -67,7 +67,7 @@ class PnPsolver {
   void SetRansacParameters(double probability = 0.99, int minInliers = 8 , int maxIterations = 300, int minSet = 4, float epsilon = 0.4,
                            float th2 = 5.991);
 
-  cv::Mat find(vector<bool> &vbInliers, int &nInliers);
+  //cv::Mat find(vector<bool> &vbInliers, int &nInliers);
 
   cv::Mat iterate(int nIterations, bool &bNoMore, vector<bool> &vbInliers, int &nInliers);
 
@@ -83,12 +83,12 @@ class PnPsolver {
               const double u, const double v);
 
   double compute_pose(double R[3][3], double T[3]);
-
+/*
   void relative_error(double & rot_err, double & transl_err,
               const double Rtrue[3][3], const double ttrue[3],
-              const double Rest[3][3],  const double test[3]);
+              const double Rest[3][3],  const double test[3]);*/
 
-  void print_pose(const double R[3][3], const double t[3]);
+  //void print_pose(const double R[3][3], const double t[3]);
   double reprojection_error(const double R[3][3], const double t[3]);
 
   void choose_control_points(void);
@@ -121,8 +121,8 @@ class PnPsolver {
 
   void copy_R_and_t(const double R_dst[3][3], const double t_dst[3],
 		    double R_src[3][3], double t_src[3]);
-
-  void mat_to_quat(const double R[3][3], double q[4]);
+/*
+  void mat_to_quat(const double R[3][3], double q[4]);*/
 
 
   double uc, vc, fu, fv;

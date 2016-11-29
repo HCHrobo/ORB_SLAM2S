@@ -40,7 +40,7 @@ public:
 
     void SetRansacParameters(double probability = 0.99, int minInliers = 6 , int maxIterations = 300);
 
-    cv::Mat find(std::vector<bool> &vbInliers12, int &nInliers);
+    //cv::Mat find(std::vector<bool> &vbInliers12, int &nInliers);
 
     cv::Mat iterate(int nIterations, bool &bNoMore, std::vector<bool> &vbInliers, int &nInliers);
 

@@ -111,11 +111,11 @@ long unsigned int Map::KeyFramesInMap()
     return mspKeyFrames.size();
 }
 
-vector<MapPoint*> Map::GetReferenceMapPoints()
-{
-    unique_lock<mutex> lock(mMutexMap);
-    return mvpReferenceMapPoints;
-}
+//vector<MapPoint*> Map::GetReferenceMapPoints()
+//{
+//    unique_lock<mutex> lock(mMutexMap);
+//    return mvpReferenceMapPoints;
+//}
 
 long unsigned int Map::GetMaxKFid()
 {

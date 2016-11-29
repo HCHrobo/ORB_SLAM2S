@@ -219,12 +219,12 @@ cv::Mat Sim3Solver::iterate(int nIterations, bool &bNoMore, vector<bool> &vbInli
 
     return cv::Mat();
 }
-
-cv::Mat Sim3Solver::find(vector<bool> &vbInliers12, int &nInliers)
-{
-    bool bFlag;
-    return iterate(mRansacMaxIts,bFlag,vbInliers12,nInliers);
-}
+//
+//cv::Mat Sim3Solver::find(vector<bool> &vbInliers12, int &nInliers)
+//{
+//    bool bFlag;
+//    return iterate(mRansacMaxIts,bFlag,vbInliers12,nInliers);
+//}
 
 void Sim3Solver::ComputeCentroid(cv::Mat &P, cv::Mat &Pr, cv::Mat &C)
 {
