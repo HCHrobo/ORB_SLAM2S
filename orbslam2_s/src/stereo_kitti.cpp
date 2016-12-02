@@ -56,12 +56,12 @@ int main(int argc, char **argv)
     vector<string> vstrImageLeft;
     vector<string> vstrImageRight;
     vector<double> vTimestamps;
-	LoadImages("D:\\BaiduYunDownload\\KITTI\\03", vstrImageLeft, vstrImageRight, vTimestamps);// by how
+	LoadImages("D:\\BaiduYunDownload\\KITTI\\01", vstrImageLeft, vstrImageRight, vTimestamps);// by how
 
     const int nImages = vstrImageLeft.size();
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-	ORB_SLAM2::System SLAM("D:\\test\\ORB-SLAM2\\Vocabulary\\ORBvoc.bin", "D:\\test\\ORB-SLAM2\\Examples\\Stereo\\KITTI03.yaml", ORB_SLAM2::System::STEREO);// by how
+	ORB_SLAM2::System SLAM("D:\\test\\ORB-SLAM2\\Vocabulary\\ORBvoc.bin", "D:\\test\\ORB-SLAM2\\Examples\\Stereo\\KITTI00-02.yaml", ORB_SLAM2::System::STEREO);// by how
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
@@ -108,8 +108,8 @@ int main(int argc, char **argv)
         if(ttrack<T)
 			this_thread::sleep_for(std::chrono::microseconds((int)((T-ttrack)*1e6)));
 		//if (ni % 100 == 0)// add by how
-		//cerr << endl << "Finished at image: "
-		//	<< string(vstrImageLeft[ni]) << endl;// add by how
+		cerr << endl << "Finished at image: "
+			<< string(vstrImageLeft[ni]) << endl;// add by how
     }
 
     // Stop all threads

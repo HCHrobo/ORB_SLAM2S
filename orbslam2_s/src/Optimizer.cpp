@@ -266,7 +266,6 @@ void Optimizer::BundleAdjustment(const vector<KeyFrame *> &vpKFs, const vector<M
             pMP->mnBAGlobalForKF = nLoopKF;
         }
     }
-
 }
 
 /**
@@ -846,6 +845,19 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
             vToErase.push_back(make_pair(pKFi,pMP));
         }
     }
+
+	//vpEdgesMono.shrink_to_fit();
+	//vpEdgeKFMono.shrink_to_fit();
+	//vpMapPointEdgeMono.shrink_to_fit();
+	//vpEdgesStereo.shrink_to_fit();
+	//vpEdgeKFStereo.shrink_to_fit();
+	//vpMapPointEdgeStereo.shrink_to_fit();
+	//vector<g2o::EdgeSE3ProjectXYZ*>().swap(vpEdgesMono);
+	//vector<KeyFrame*>().swap(vpEdgeKFMono);
+	//vector<MapPoint*>().swap(vpMapPointEdgeMono);
+	//vector<g2o::EdgeStereoSE3ProjectXYZ*>().swap(vpEdgesStereo);
+	//vector<KeyFrame*>().swap(vpEdgeKFStereo);
+	//vector<MapPoint*>().swap(vpMapPointEdgeStereo);
 
     // Get Map Mutex
     unique_lock<mutex> lock(pMap->mMutexMapUpdate);

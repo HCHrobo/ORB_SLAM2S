@@ -69,7 +69,7 @@ void LocalMapping::Run()
             // Check recent MapPoints
             // VI-B recent map points culling
             // 剔除ProcessNewKeyFrame函数中引入的不合格MapPoints
-            MapPointCulling();
+            MapPointCulling();//应该在此处释放new出来的MapPoint内存
 
             // Triangulate new MapPoints
             // VI-C new map points creation
@@ -101,7 +101,7 @@ void LocalMapping::Run()
                 // Tracking中先把关键帧交给LocalMapping线程
                 // 并且在Tracking中InsertKeyFrame函数的条件比较松，交给LocalMapping线程的关键帧会比较密
                 // 在这里再删除冗余的关键帧
-                KeyFrameCulling();
+                KeyFrameCulling();//应该在此处释放new出来的KeyFrame内存
             }
 
             // 将当前帧加入到闭环检测队列中
