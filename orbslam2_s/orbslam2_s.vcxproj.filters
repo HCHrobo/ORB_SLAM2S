@@ -482,11 +482,5 @@
     <ClInclude Include="Thirdparty\g2o\g2o\types\types_six_dof_expmap.h">
       <Filter>头文件\g2o\types</Filter>
     </ClInclude>
-    <ClInclude Include="Thirdparty\g2o\config.h">
-      <Filter>头文件\g2o</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
