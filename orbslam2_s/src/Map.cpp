@@ -81,11 +81,11 @@ void Map::EraseKeyFrame(KeyFrame *pKF)
  * @brief 设置参考MapPoints，将用于DrawMapPoints函数画图
  * @param vpMPs Local MapPoints
  */
-void Map::SetReferenceMapPoints(const vector<MapPoint *> &vpMPs)
-{
-    unique_lock<mutex> lock(mMutexMap);
-    mvpReferenceMapPoints = vpMPs;
-}
+//void Map::SetReferenceMapPoints(const vector<MapPoint *> &vpMPs)
+//{
+//    unique_lock<mutex> lock(mMutexMap);
+//    mvpReferenceMapPoints = vpMPs;
+//}
 
 vector<KeyFrame*> Map::GetAllKeyFrames()
 {
@@ -134,7 +134,7 @@ void Map::clear()
     mspMapPoints.clear();
     mspKeyFrames.clear();
     mnMaxKFid = 0;
-    mvpReferenceMapPoints.clear();
+    //mvpReferenceMapPoints.clear();
     mvpKeyFrameOrigins.clear();
 }
 

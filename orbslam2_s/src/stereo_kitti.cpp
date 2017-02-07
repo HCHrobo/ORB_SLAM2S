@@ -108,8 +108,8 @@ int main(int argc, char **argv)
         if(ttrack<T)
 			this_thread::sleep_for(std::chrono::microseconds((int)((T-ttrack)*1e6)));
 		//if (ni % 100 == 0)// add by how
-		//cerr << endl << "Finished at image: "
-		//	<< string(vstrImageLeft[ni]) << endl;// add by how
+		cerr << endl << "Finished at image: "
+			<< string(vstrImageLeft[ni]) << endl;// add by how
     }
 
     // Stop all threads

@@ -596,7 +596,7 @@ void Tracking::StereoInitialization()
 
         // 把当前（最新的）局部MapPoints作为ReferenceMapPoints
         // ReferenceMapPoints是DrawMapPoints函数画图的时候用的
-        mpMap->SetReferenceMapPoints(mvpLocalMapPoints);
+        //mpMap->SetReferenceMapPoints(mvpLocalMapPoints);
 
         mpMap->mvpKeyFrameOrigins.push_back(pKFini);
 
@@ -1229,7 +1229,7 @@ void Tracking::UpdateLocalMap()
 {
     // This is for visualization
     // 这行程序放在UpdateLocalPoints函数后面是不是好一些
-    mpMap->SetReferenceMapPoints(mvpLocalMapPoints);
+    //mpMap->SetReferenceMapPoints(mvpLocalMapPoints);
 
     // Update
     // 更新局部关键帧和局部MapPoints
