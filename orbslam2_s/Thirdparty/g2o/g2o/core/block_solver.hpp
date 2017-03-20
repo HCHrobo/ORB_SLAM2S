@@ -261,14 +261,14 @@ bool BlockSolver<Traits>::buildStructure(bool zeroBlocks)
   _Hpl->fillSparseBlockMatrixCCS(*_HplCCS);
 
   for (size_t i = 0; i < _optimizer->indexMapping().size(); ++i) {
-    OptimizableGraph::Vertex* v = _optimizer->indexMapping()[i];
-    if (v->marginalized()){
-      const HyperGraph::EdgeSet& vedges=v->edges();
+    OptimizableGraph::Vertex* v = _optimizer->indexMapping()[i];//提取节点v
+    if (v->marginalized()){//判断是否MapPoint
+      const HyperGraph::EdgeSet& vedges=v->edges();//取连接的边
       for (HyperGraph::EdgeSet::const_iterator it1=vedges.begin(); it1!=vedges.end(); ++it1){
         for (size_t i=0; i<(*it1)->vertices().size(); ++i)
         {
           OptimizableGraph::Vertex* v1= (OptimizableGraph::Vertex*) (*it1)->vertex(i);
-          if (v1->hessianIndex()==-1 || v1==v)
+          if (v1->hessianIndex()==-1 || v1==v)//剔除自身和不在hessian矩阵中的节点
             continue;
           for  (HyperGraph::EdgeSet::const_iterator it2=vedges.begin(); it2!=vedges.end(); ++it2){
             for (size_t j=0; j<(*it2)->vertices().size(); ++j)
@@ -278,8 +278,8 @@ bool BlockSolver<Traits>::buildStructure(bool zeroBlocks)
                 continue;
               int i1=v1->hessianIndex();
               int i2=v2->hessianIndex();
-              if (i1<=i2) {
-                schurMatrixLookup->addBlock(i1, i2);
+              if (i1<=i2) {//确保是上三角
+                schurMatrixLookup->addBlock(i1, i2);//加入block，若对应位置存在直接返回该值
               }
             }
           }
@@ -288,7 +288,7 @@ bool BlockSolver<Traits>::buildStructure(bool zeroBlocks)
     }
   }
 
-  _Hschur->takePatternFromHash(*schurMatrixLookup);
+  _Hschur->takePatternFromHash(*schurMatrixLookup);	
   delete schurMatrixLookup;
   _Hschur->fillSparseBlockMatrixCCSTransposed(*_HschurTransposedCCS);
 

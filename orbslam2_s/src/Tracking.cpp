@@ -27,7 +27,7 @@
 #include"ORBmatcher.h"
 #include"Converter.h"
 #include"Map.h"
-#include"Initializer.h"
+//#include"Initializer.h"
 
 #include"Optimizer.h"
 #include"PnPsolver.h"
@@ -1336,8 +1336,9 @@ void Tracking::UpdateLocalKeyFrames()
     // Include also some not-already-included keyframes that are neighbors to already-included keyframes
     // V-D K2: neighbors to K1 in the covisibility graph
     // 策略2：与策略1得到的局部关键帧共视程度很高的关键帧作为局部关键帧
-	int i = 0;
-    for(vector<KeyFrame*>::const_iterator itKF=mvpLocalKeyFrames.begin(), itEndKF=mvpLocalKeyFrames.end(); itKF!=itEndKF; itKF++)
+	int i = 0;// add by hao
+	int size_mvp = mvpLocalKeyFrames.size();// add by hao
+	for (vector<KeyFrame*>::const_iterator itKF = mvpLocalKeyFrames.begin(); i<size_mvp; i++,itKF++)
     {
         // Limit the number of keyframes
         if(mvpLocalKeyFrames.size()>80)
@@ -1357,8 +1358,6 @@ void Tracking::UpdateLocalKeyFrames()
                 {
                     mvpLocalKeyFrames.push_back(pNeighKF);
                     pNeighKF->mnTrackReferenceForFrame=mCurrentFrame.mnId;
-					itKF = mvpLocalKeyFrames.begin()+i;// add by how
-					itEndKF = mvpLocalKeyFrames.end();// add by how
                     break;
                 }
             }
@@ -1375,8 +1374,6 @@ void Tracking::UpdateLocalKeyFrames()
                 {
                     mvpLocalKeyFrames.push_back(pChildKF);
                     pChildKF->mnTrackReferenceForFrame=mCurrentFrame.mnId;
-					itKF = mvpLocalKeyFrames.begin() + i;// add by how
-					itEndKF = mvpLocalKeyFrames.end();// add by how
                     break;
                 }
             }
@@ -1391,12 +1388,9 @@ void Tracking::UpdateLocalKeyFrames()
             {
                 mvpLocalKeyFrames.push_back(pParent);
                 pParent->mnTrackReferenceForFrame=mCurrentFrame.mnId;
-				itKF = mvpLocalKeyFrames.begin() + i;// add by how
-				itEndKF = mvpLocalKeyFrames.end();// add by how
                 break;
             }
         }
-		i++;
     }
 
     // V-D Kref： shares the most map points with current frame

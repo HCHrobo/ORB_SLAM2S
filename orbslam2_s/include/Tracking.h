@@ -32,7 +32,7 @@
 #include "ORBVocabulary.h"
 #include "KeyFrameDatabase.h"
 #include "ORBextractor.h"
-#include "Initializer.h"
+//#include "Initializer.h"
 #include "System.h"
 
 #include <mutex>

@@ -214,6 +214,14 @@ void Optimizer::BundleAdjustment(const vector<KeyFrame *> &vpKFs, const vector<M
         }
     }
 
+	ofstream f;
+	const string &filename = "optimizer\\BundleAdjustment.txt";
+	f.open(filename.c_str(), ios_base::app);
+	f << fixed;
+	f << "size of vertices = " << optimizer.vertices().size() << " ; size of vertices(KFs) = " << vpKFs.size() 
+		<< " ; size of vertices(MPs) = " << vpMP.size() << " ; size of edges = " << optimizer.edges().size() << endl;
+	f.close();
+
     // Optimize!
     // 步骤4：开始优化
     optimizer.initializeOptimization();
@@ -423,6 +431,13 @@ int Optimizer::PoseOptimization(Frame *pFrame)
 
     if(nInitialCorrespondences<3)
         return 0;
+
+	ofstream f;
+	const string &filename = "optimizer\\PoseOptimization.txt";
+	f.open(filename.c_str(), ios_base::app);
+	f << fixed;
+	f << "frameId = " << pFrame->mnId << " ; size of vertices = " << optimizer.vertices().size() << " ; size of edges = " << optimizer.edges().size() << endl;
+	f.close();
 
     // We perform 4 optimizations, after each optimization we classify observation as inlier/outlier
     // At the next optimization, outliers are not included, but at the end they can be classified as inliers again.
@@ -755,6 +770,13 @@ void Optimizer::LocalBundleAdjustment(KeyFrame *pKF, bool* pbStopFlag, Map* pMap
     if(pbStopFlag)
         if(*pbStopFlag)
             return;
+
+	ofstream f;
+	const string &filename = "optimizer\\LocalBundleAdjustment.txt";
+	f.open(filename.c_str(), ios_base::app);
+	f << fixed;
+	f << "KeyframeId = " << pKF->mnId << " ; size of vertices = " << optimizer.vertices().size() << " ; size of edges = " << optimizer.edges().size() << endl;
+	f.close();
 
     // 步骤9：开始优化
     optimizer.initializeOptimization();
@@ -1133,6 +1155,13 @@ void Optimizer::OptimizeEssentialGraph(Map* pMap, KeyFrame* pLoopKF, KeyFrame* p
         }
     }
 
+	ofstream f;
+	const string &filename = "optimizer\\OptimizeEssentialGraph.txt";
+	f.open(filename.c_str(), ios_base::app);
+	f << fixed;
+	f << "KeyframeId = " << pCurKF->mnId << " ; size of vertices = " << optimizer.vertices().size() << " ; size of edges = " << optimizer.edges().size() << endl;
+	f.close();
+
     // Optimize!
     // 步骤5：开始g2o优化
     optimizer.initializeOptimization();
@@ -1365,6 +1394,13 @@ int Optimizer::OptimizeSim3(KeyFrame *pKF1, KeyFrame *pKF2, vector<MapPoint *> &
         vpEdges21.push_back(e21);
         vnIndexEdge.push_back(i);
     }
+
+	ofstream f;
+	const string &filename = "optimizer\\OptimizeSim3.txt";
+	f.open(filename.c_str(), ios_base::app);
+	f << fixed;
+	f << "Keyframe1 Id = " << pKF1->mnId << " ; Keyframe2 Id = " << pKF2->mnId << " ; size of vertices = " << optimizer.vertices().size() << " ; size of edges = " << optimizer.edges().size() << endl;
+	f.close();
 
     // Optimize!
     // 步骤3：g2o开始优化，先迭代5次

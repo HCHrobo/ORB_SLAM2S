@@ -54,10 +54,6 @@ IF(UNIX)
   MESSAGE(STATUS "Compiling on Unix")
 ENDIF(UNIX)
 
-# For building the CHOLMOD / CSPARSE solvers
-FIND_PACKAGE(BLAS)
-FIND_PACKAGE(LAPACK)
-
 # Eigen library parallelise itself, though, presumably due to performance issues
 # OPENMP is experimental. We experienced some slowdown with it
 FIND_PACKAGE(OpenMP)

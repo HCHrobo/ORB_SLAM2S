@@ -51,7 +51,7 @@ public:
 
 public:
 
-	EIGEN_MAKE_ALIGNED_OPERATOR_NEW//add by how avoid the R6010 -abort()has been called caused by g2o::sim3()
+	EIGEN_MAKE_ALIGNED_OPERATOR_NEW//add by hao avoid the R6010 -abort()has been called caused by g2o::sim3()
 
     LoopClosing(Map* pMap, KeyFrameDatabase* pDB, ORBVocabulary* pVoc,const bool bFixScale);
 

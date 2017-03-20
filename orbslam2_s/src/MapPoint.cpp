@@ -159,9 +159,9 @@ void MapPoint::EraseObservation(KeyFrame* pKF)
 			if (mObservations.size() != 0){
 				if (mpRefKF == pKF)
 					mpRefKF = mObservations.begin()->first;
-			}// replace by how
+			}// replace by hao
 			else
-				KeyFrame* mpRefKF(static_cast<KeyFrame*>(NULL));// add by how
+				mpRefKF=static_cast<KeyFrame*>(NULL);// add by hao
 
             // If only 2 observations or less, discard point
             // 当观测到该点的相机数目少于2时，丢弃该点
